@@ -30,5 +30,5 @@ setup(
         'Development Status :: 3 - Alpha'
     ],
     license='BSD License',
-    keywords="django chat room",
+    keywords="django chat room channels websocket",
 )
