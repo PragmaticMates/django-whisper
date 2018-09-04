@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Chat room' %} {{ room.slug }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-6 col-sm box-with-shadow p-4">
+            <div class="chat-room">
+                <div class="message-list-wrapper">
+                    <div class="message-list" data-current-username="{{ request.user }}"></div>
+                    <small id="user-typing"></small>
+                </div>
+                <div class="message-input-wrapper">
+                    <textarea class="form-control message-input autoExpand w-100" rows="1" data-min-rows="1" data-max-rows="7" placeholder="{% trans 'Message' %}"></textarea>
+                    <a href="#" class="send-message"><i class="fas fa-lg fa-arrow-circle-up"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            var room_slug = '{{ room.slug }}';
+
+            if (room_slug) {
+                socket = initSocket(room_slug, $("html, body"));
+            }
+        });
+    </script>
+{% endblock %}

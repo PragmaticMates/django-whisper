@@ -1,0 +1,14 @@
+{% load i18n utils %}
+{% blocktrans %}Hi {{ recipient }},{% endblocktrans %}
+
+{% trans "Some users sent you few messages while you've been away:" %}
+{% for room in rooms %}
+
+    {{ room }}:
+
+    {% for message in room.unread_messages %}
+        {{ message.user }} at {{ message.created }}: {{ message.text }}
+    {% endfor %}
+
+    {% trans 'Read more at this URL:' %} {% uri room.get_absolute_url %}
+{% endfor %}
