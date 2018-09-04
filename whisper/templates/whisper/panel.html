@@ -1,0 +1,118 @@
+{% load static i18n cache chat %}
+
+<div id="page-chat">
+    <div class="chat-channels show">
+        <header class="bg-white">
+            <ul class="nav" id="chat-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-users-tab" data-toggle="pill" href="#pills-users" role="tab" aria-controls="pills-users" aria-selected="true">{% trans 'Users' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-rooms-tab" data-toggle="pill" href="#pills-rooms" role="tab" aria-controls="pills-rooms" aria-selected="false">{% trans 'Rooms' %}
+                        <span class="badge badge-primary ml-2 unread-chat-rooms"></span>
+                    </a>
+                </li>
+            </ul>
+            <a id="chat-channels-hide" href="#"><i class="fas fa-times"></i></a>
+        </header>
+
+        <div class="tab-content" id="chat-tabContent">
+            <div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
+{#                {% cache 3600 chat_users request.user.pk %}#}
+                    {% for user in chat_users %}
+                        {% if user != request.user %}
+                            <div class="chat-item position-relative">
+                                {% include 'whisper/user.html' with user=user %}
+                                <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="{% room_slug user %}"></a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+{#                {% endcache %}#}
+            </div>
+            <div class="tab-pane fade" id="pills-rooms" role="tabpanel" aria-labelledby="pills-rooms-tab">
+                {% for room in recent_rooms %}
+                    <div class="chat-item position-relative {% if room.unread_messages > 0 %}has-unread-messages{% endif %}" rel="room-{{ room.id }}">
+                        <div>
+                            <div>
+                                <span>{{ room.name }}</span>
+                                <small class="d-block">{{ room.modified }}</small>
+                            </div>
+                            <span class="badge badge-primary rounded-circle ml-1">{{ room.unread_messages }}</span>
+                        </div>
+                        <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="{{ room.slug }}"></a>
+                    </div>
+                {% endfor %}
+                <div class="chat-item position-relative chat-item-template" rel="room-id-placeholder">
+                    <div>
+                        <div>
+                            <span>room-name-placeholder</span>
+                            <small class="d-block">room-modified-placeholder</small>
+                        </div>
+                        <span class="badge badge-primary rounded-circle ml-1"></span>
+                    </div>
+                    <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="room-slug-placeholder"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chat-room">
+        <header class="bg-white">
+            <div>
+                <h3 class="m-0"></h3>
+                <small class="user-count"></small>
+            </div>
+            <div class="d-flex flex-nowrap">
+                <div class="btn-group" role="group">
+                    <a href="#" class="ml-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fal fa-lg fa-fw fa-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a id="show-room-detail" href="#" class="dropdown-item room-action" data-url="{% url 'chat:room_detail' '-slug-placeholder-' %}">
+                            <i class="fal fa-fw fa-comments"></i> {% trans 'Detail' %}
+                        </a>
+                        <a id="update-room" href="#" class="dropdown-item room-action" data-url="{% url 'chat:room_update' '-slug-placeholder-' %}">
+                            <i class="fa fa-fw fa-pencil"></i> {% trans 'Update' %}
+                        </a>
+                        <a id="chat-room-option-show" href="#" class="dropdown-item">
+                            <i class="fal fa-fw fa-user-plus"></i> {% trans 'People' %}
+                        </a>
+                        <a id="leave-room" href="#" class="dropdown-item">
+                            <i class="far fa-fw fa-sign-out"></i> {% trans 'Leave' %}
+                        </a>
+                    </div>
+                </div>
+                <a id="chat-room-hide" class="ml-2" href="#"><i class="fas fa-times"></i></a>
+            </div>
+        </header>
+
+        <div class="message-list-wrapper">
+            <div class="message-list" data-current-username="{{ request.user }}"></div>
+            <small id="user-typing"></small>
+        </div>
+
+        <footer class="bg-white">
+            <div class="message-input-wrapper">
+                <textarea class="form-control message-input autoExpand w-100" rows="1" data-min-rows="1" data-max-rows="7" placeholder="{% trans 'Message' %}"></textarea>
+                <a href="#" class="send-message"><i class="fas fa-lg fa-arrow-circle-up"></i></a>
+            </div>
+        </footer>
+    </div>
+    <div class="chat-room-option">
+        <header class="bg-white">
+            <div>
+                <h3 class="m-0">{% trans 'Room options' %}</h3>
+                <small></small>
+            </div>
+            <div class="d-flex flex-nowrap">
+                <a id="chat-room-option-hide" class="ml-2" href="#"><i class="fas fa-times"></i></a>
+            </div>
+        </header>
+
+        <div class="user-list-wrapper">
+        </div>
+
+        <footer class="bg-white">
+{#            todo create template tag which render add user form #}
+        </footer>
+    </div>
+</div>
