@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-04 13:47+0200\n"
-"PO-Revision-Date: 2018-08-16 12:44+0058\n"
+"PO-Revision-Date: 2018-09-04 15:05+0200\n"
 "Last-Translator: b'Name 1 <erik@pragmaticmates.com>'\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Translated-Using: django-rosetta 0.8.1\n"
 
 #: apps.py:11
@@ -74,17 +74,17 @@ msgstr "správy"
 #: settings.py:36
 #, python-brace-format
 msgid "{username} left room"
-msgstr ""
+msgstr "{username} opustil miestnosť"
 
 #: settings.py:37
 #, python-brace-format
 msgid "{username} joined room"
-msgstr ""
+msgstr "{username} sa pripojil do miestnosti"
 
 #: settings.py:38
 #, python-brace-format
 msgid "{username} is typing ..."
-msgstr ""
+msgstr "{username} píše …"
 
 #: templates/whisper/mails/notification.txt:2
 #, python-format
@@ -109,31 +109,22 @@ msgstr "Správa"
 
 #: templates/whisper/room_form.html:8
 msgid "Save"
-msgstr ""
+msgstr "Uložiť"
 
 #: urls.py:9
-#, fuzzy
-#| msgctxt "url"
-#| msgid "room/<slug>/"
 msgctxt "url"
 msgid "room/<slug>/update/"
-msgstr "miestnost/<slug>/"
+msgstr "miestnost/<slug>/zmenit/"
 
 #: urls.py:10
-#, fuzzy
-#| msgctxt "url"
-#| msgid "room/<slug>/"
 msgctxt "url"
 msgid "room/<slug>/leave/"
-msgstr "miestnost/<slug>/"
+msgstr "miestnost/<slug>/odist/"
 
 #: urls.py:11
-#, fuzzy
-#| msgctxt "url"
-#| msgid "room/<slug>/"
 msgctxt "url"
 msgid "room/<slug>/add-member/"
-msgstr "miestnost/<slug>/"
+msgstr "miestnost/<slug>/pridat-clena/"
 
 #: urls.py:12
 msgctxt "url"

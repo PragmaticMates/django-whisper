@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-04 15:08+0200\n"
+"PO-Revision-Date: 2018-09-04 15:09+0200\n"
+"Last-Translator: b'Name 1 <erik@pragmaticmates.com>'\n"
+"Language-Team: \n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Translated-Using: django-rosetta 0.8.1\n"
+"X-Poedit-Basepath: ../../../static/whisper/js\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: chat.js:47
+msgid "member"
+msgid_plural "members"
+msgstr[0] "člen"
+msgstr[1] "členovia"
+msgstr[2] "členov"
+
+#~ msgid "Chat"
+#~ msgstr "Chat"
+
+#~ msgid "You have unread chat messages"
+#~ msgstr "Máš neprečítané správy"
+
+#~ msgid "name"
+#~ msgstr "meno"
+
+#~ msgid "users"
+#~ msgstr "užívatelia"
+
+#~ msgid "created"
+#~ msgstr "vytvorené"
+
+#~ msgid "modified"
+#~ msgstr "upravené"
+
+#~ msgid "room"
+#~ msgstr "miestnosť"
+
+#~ msgid "rooms"
+#~ msgstr "miestnosti"
+
+#~ msgid "last read"
+#~ msgstr "naposledy prečítané"
+
+#~ msgid "last notified"
+#~ msgstr "naposledy notifikovaný"
+
+#~ msgid "text"
+#~ msgstr "text"
+
+#~ msgid "message"
+#~ msgstr "správa"
+
+#~ msgid "messages"
+#~ msgstr "správy"
+
+#~ msgid "{username} is typing ..."
+#~ msgstr "{username} píše …"
+
+#~ msgid "{username} left room"
+#~ msgstr "{username} opustil miestnosť"
+
+#~ msgid "{username} joined room"
+#~ msgstr "{username} sa pripojil do miestnosti"
+
+#~ msgid "Hi %(recipient)s,"
+#~ msgstr "Ahoj %(recipient)s,"
+
+#~ msgid "Some users sent you few messages while you've been away:"
+#~ msgstr "Kým si bol nedostupný, niektorí užívatelia ti poslali niekoľko správ:"
+
+#~ msgid "Read more at this URL:"
+#~ msgstr "Čítajte viac na tejto URL:"
+
+#~ msgid "Chat room"
+#~ msgstr "Chatovacia miestnosť"
+
+#~ msgid "Message"
+#~ msgstr "Správa"
+
+#~ msgid "Save"
+#~ msgstr "Uložiť"
+
+#~ msgctxt "url"
+#~ msgid "room/<slug>/update/"
+#~ msgstr "miestnost/<slug>/zmenit/"
+
+#~ msgctxt "url"
+#~ msgid "room/<slug>/leave/"
+#~ msgstr "miestnost/<slug>/odist/"
+
+#~ msgctxt "url"
+#~ msgid "room/<slug>/add-member/"
+#~ msgstr "miestnost/<slug>/pridat-clena/"
+
+#~ msgctxt "url"
+#~ msgid "room/<slug>/"
+#~ msgstr "miestnost/<slug>/"
