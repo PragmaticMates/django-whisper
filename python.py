@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     name='django-whisper',
     version='0.1.0',
-    description='Chat with rooms for Django',
+    description='Chat with rooms for Django based on websockets',
     long_description=open('README.md').read(),
     author='Pragmatic Mates',
     author_email='info@pragmaticmates.com',
@@ -17,7 +17,7 @@ setup(
         'whisper.migrations'
     ],
     include_package_data=True,
-    install_requires=('django',),
+    install_requires=('django', 'channels'),
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
