@@ -7,6 +7,7 @@ setup(
     version='0.1.0',
     description='Chat with rooms for Django based on websockets',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     author='Pragmatic Mates',
     author_email='info@pragmaticmates.com',
     maintainer='Pragmatic Mates',
