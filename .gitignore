@@ -108,3 +108,6 @@ venv.bak/
 
 # MacOS
 .DS_Store
+
+# node modules
+node_modules
