@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
@@ -59,6 +60,13 @@ class RoomUser(models.Model):
     @staticmethod
     def get_users(room):
         return get_user_model().objects.filter(roomuser__room=room)
+
+    @staticmethod
+    def get_user(room, user_id):
+        try:
+            return get_user_model().objects.get(roomuser__room=room, roomuser__user__pk=user_id)
+        except ObjectDoesNotExist:
+            return None
 
 
 class Message(models.Model):

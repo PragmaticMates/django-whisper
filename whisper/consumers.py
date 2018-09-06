@@ -3,6 +3,7 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import loader
 from django.template.defaultfilters import date
@@ -72,8 +73,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return self.room.message_set.all()
 
     @database_sync_to_async
-    def remove_user_from_room(self):
-        return RoomUser.objects.filter(user=self.user, room=self.room).delete()
+    def remove_user_from_room(self, user_id):
+        return RoomUser.objects.filter(user__pk=user_id, room=self.room).delete()
+
+    @database_sync_to_async
+    def get_user(self, user_id):
+        return RoomUser.get_user(self.room, user_id)
 
     @database_sync_to_async
     def get_room_users(self):
@@ -97,7 +102,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             json_type = text_data_json.get('type', None)
 
             if json_type == 'leave_room':
-                await self.remove_user_from_room()
+                await self.remove_user_from_room(self.user.pk)
                 dict_message = {'USER_LEFT': {'username': str(self.user), 'room': self.room.name, "timestamp": date(localtime(now()), settings.DATETIME_FORMAT)}}
                 await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
             elif json_type == 'user_typing':
@@ -110,19 +115,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'text': ChatMessageHelper.message_from_type('USER_TYPING', username=str(self.user))
                         }
                     )
-            elif json_type == 'room_options':
+            elif json_type == 'room_members':
                 users = await self.get_room_users()
-                print(users)
 
                 await self.send(text_data=json.dumps({
-                    'type': 'room_options',
+                    'type': 'room_members',
                     'members': [{
                         'id': user.id,
                         'name': str(user),
-                        'html': loader.get_template('whisper/user.html').render({'user': user})
+                        'html': loader.get_template('whisper/member.html').render({'user': user, 'scope_user': self.user})
                     } for user in users],
                 }))
-
+            elif json_type == 'remove_member':
+                user_id = text_data_json.get('user_id', None)
+                user = await self.get_user(user_id)
+                await self.remove_user_from_room(user_id)
+                dict_message = {'USER_LEFT': {'username': str(user), 'room': self.room.name, "timestamp": date(localtime(now()), settings.DATETIME_FORMAT)}}
+                await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
             else:
                 text = text_data_json['message']
 

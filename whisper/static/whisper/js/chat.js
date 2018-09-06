@@ -6,6 +6,7 @@ function initSocket(room_slug, scrollItem) {
     var message_input = chat_room.find('.message-input');
     var message_submit = chat_room.find('.send-message');
     var leave_room = chat_room.find('#leave-room');
+    var member_list_wrapper = $('.chat-room-members .member-list-wrapper');
     var user_typing = chat_room.find('#user-typing');
     var current_username = messages_wrapper.data('current-username');
     var room_id = null;
@@ -24,6 +25,8 @@ function initSocket(room_slug, scrollItem) {
             handleRoomProperties(data);
         } else if (type == 'user_typing') {
             handleUserTyping(data);
+        } else if (type == 'room_members') {
+            handleRoomMembers(data);
         } else {
             handleMessage(data, type);
         }
@@ -76,11 +79,19 @@ function initSocket(room_slug, scrollItem) {
         }
     }
 
+    function handleRoomMembers(data) {
+        var members = data['members'];
+        member_list_wrapper.html('');
+        members.forEach(function (member) {
+            member_list_wrapper.append(member['html']);
+        });
+    }
+
     function handleMessage(data, type) {
         var message = data['message'];
         var username = data['username'];
         var timestamp = data['timestamp'];
-        var message_class = 'message'
+        var message_class = 'message';
         if (current_username == username) {
             message_class = 'my message';
         } else if (username == null) {
@@ -146,6 +157,16 @@ function initSocket(room_slug, scrollItem) {
         $(this).attr('href', url);
     });
 
+    $('.chat-room-members').on('click', '.remove-member', function (event) {
+        socket.send(JSON.stringify({
+            'type': 'remove_member',
+            'user_id': $(this).data('user-id')
+        }));
+        $(this).closest('.chat-item').remove();
+
+        event.preventDefault();
+    });
+
     return socket;
 }
 
@@ -155,20 +176,20 @@ function initChat() {
     $('#chat-channels-show').click(function (event) {
         $('#page-chat').addClass("show");
         $('.chat-channels').addClass("show");
-        $('body').addClass("no-scroll-mobile");
-        $('html').addClass("no-scroll-mobile");
+        // $('body').addClass("no-scroll-mobile");
+        // $('html').addClass("no-scroll-mobile");
         event.preventDefault();
     });
 
     $('#chat-channels-hide').click(function (event) {
         $('#page-chat').removeClass("show");
         $('.chat-channels').removeClass("show");
-        $('body').removeClass("no-scroll-mobile");
-        $('html').removeClass("no-scroll-mobile");
+        // $('body').removeClass("no-scroll-mobile");
+        // $('html').removeClass("no-scroll-mobile");
         event.preventDefault();
     });
 
-    $('.tab-content').on('click' , '.chat-room-show', function (event) {
+    $('.tab-content').on('click', '.chat-room-show', function (event) {
         $('#page-chat').addClass("show");
         $('.chat-room').addClass("show");
         $('.chat-channels').removeClass("show");
@@ -182,21 +203,21 @@ function initChat() {
         event.preventDefault();
     });
 
-    $('#chat-room-option-show').click(function (event) {
-        $('.chat-room-option').addClass("show");
+    $('#chat-room-members-show').click(function (event) {
+        $('.chat-room-members').addClass("show");
         $('.chat-room').removeClass("show");
 
-        if(socket) {
+        if (socket) {
             socket.send(JSON.stringify({
-                'type': 'room_options'
+                'type': 'room_members'
             }));
         }
 
         event.preventDefault();
     });
 
-    $('#chat-room-option-hide').click(function (event) {
-        $('.chat-room-option').removeClass("show");
+    $('#chat-room-members-hide').click(function (event) {
+        $('.chat-room-members').removeClass("show");
         $('.chat-room').addClass("show");
         event.preventDefault();
     });
