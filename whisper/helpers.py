@@ -1,17 +1,14 @@
 import json
 from json import JSONDecodeError
-
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
-from whisper import settings
 from django.template.defaultfilters import date
 from django.templatetags.tz import localtime
-
+from whisper import settings
 from whisper.models import Message
 
 
 class ChatMessageHelper:
-
     # send system message
     @staticmethod
     async def send_message(room, text_message, sender=None):
