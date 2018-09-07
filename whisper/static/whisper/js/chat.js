@@ -119,19 +119,23 @@ function initSocket(room_slug, scrollItem) {
         var message = message_input.val().trim();
 
         if (message.length > 0) {
-            socket.send(JSON.stringify({
-                'message': message
-            }));
-
-            message_input.val('').trigger("input.autoExpand");
+            if (socket.readyState === socket.OPEN) {
+                socket.send(JSON.stringify({
+                    'message': message
+                }));
+                message_input.val('').trigger("input.autoExpand");
+            } else {
+                alert('Chat error, try to reload the page');
+            }
         }
     }
 
     function sendUserTyping() {
-        socket.send(JSON.stringify({
-            'type': 'user_typing'
-        }));
-
+        if (socket.readyState === socket.OPEN) {
+            socket.send(JSON.stringify({
+                'type': 'user_typing'
+            }));
+        }
     }
 
     function leaveRoom() {
@@ -182,11 +186,15 @@ function initSocket(room_slug, scrollItem) {
         var member_select = member_form.find('select');
 
         if (member_select.val() != null) {
-            socket.send(JSON.stringify({
-                'type': 'add_members',
-                'user_ids': member_select.val()
-            }));
-            member_select.val('')
+            if (socket.readyState === socket.OPEN) {
+                socket.send(JSON.stringify({
+                    'type': 'add_members',
+                    'user_ids': member_select.val()
+                }));
+                member_select.val('')
+            } else {
+                alert('Chat error, try to reload the page');
+            }
         }
 
         event.preventDefault();
