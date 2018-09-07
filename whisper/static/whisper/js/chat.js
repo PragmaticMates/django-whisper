@@ -55,7 +55,6 @@ function initSocket(room_slug, scrollItem) {
         var rel_room = 'room-' + room_id;
         var room_list_wrapper = $('#page-chat #pills-rooms');
         if (room_list_wrapper.length) {
-        if (room_list_wrapper.length) {
             var room_item = room_list_wrapper.find('[rel=' + rel_room + ']');
             if (room_item.length === 0) {
                 var room_item_template = room_list_wrapper.find('.chat-item-template').clone(true);
