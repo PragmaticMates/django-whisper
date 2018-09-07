@@ -1,7 +1,7 @@
 import json
 
 from channels.db import database_sync_to_async
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,9 +16,7 @@ from whisper.models import Room, Message, RoomUser
 from whisper.views import RoomAddMemberView
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
-    # TODO: use AsyncJsonWebsocketConsumer instead
-    # https://github.com/andrewgodwin/channels-examples/blob/master/multichat/chat/consumers.py
+class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def websocket_connect(self, message):
         room_slug = self.scope['url_route']['kwargs']['room_slug']
@@ -38,23 +36,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # send room properties
         self.user_count = await ChatMessageHelper.get_user_count(self.room)
-        await self.send(text_data=json.dumps({
+        await self.send_json(content={
             'type': 'room_properties',
             'room_name': self.room.name,
             'room_id': self.room.pk,
             'room_slug': room_slug,
             'room_modified': date(localtime(self.room.modified), settings.DATETIME_FORMAT),
             'user_count': self.user_count
-        }))
+        })
 
         # init room with previous messages
         for message in await self.get_room_messages():
-            await self.send(text_data=json.dumps({
+            await self.send_json(content={
                 'type': type,
                 'message': message.text if message.user is not None else ChatMessageHelper.localized_message_from_json(message.text),
                 'timestamp': date(localtime(message.created), settings.DATETIME_FORMAT),
                 'username': str(message.user) if message.user is not None else None,
-            }))
+            })
 
         await self.channel_layer.group_send(
             f'unread-chat-messages-{self.user.pk}', {
@@ -90,7 +88,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         users = []
 
         user_objects = get_user_model().objects.filter(pk__in=user_pks)
-        print(user_objects)
 
         for user in user_objects:
             users.append(self.room.add_user(user))
@@ -109,10 +106,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         RoomUser.objects.update_or_create(room=room, user=user, defaults={'last_read': now()})
 
     # Receive message from WebSocket
-    async def receive(self, text_data=None, bytes_data=None):
+    async def receive_json(self, content):
         if self.user.is_authenticated:
-            text_data_json = json.loads(text_data)
-            json_type = text_data_json.get('type', None)
+            json_type = content.get('type', None)
 
             if json_type == 'leave_room':
                 await self.remove_user_from_room(self.user.pk)
@@ -134,14 +130,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.send_room_members()
 
             elif json_type == 'remove_member':
-                user_ids = text_data_json.get('user_id', None)
+                user_ids = content.get('user_id', None)
                 user = await self.get_user(user_ids)
                 await self.remove_user_from_room(user_ids)
                 dict_message = {'USER_LEFT': {'username': str(user), 'room': self.room.name, "timestamp": date(localtime(now()), settings.DATETIME_FORMAT)}}
                 await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
 
             elif json_type == 'add_members':
-                user_ids = text_data_json.get('user_ids', None)
+                user_ids = content.get('user_ids', None)
                 if user_ids is not None:
                     user_ids = list(map(int, user_ids))
                     users = await self.add_room_users(user_ids)
@@ -151,7 +147,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     await self.send_room_members()
 
             else:
-                text = text_data_json['message']
+                text = content['message']
 
                 # update last read flag of current room user (create if not exists)
                 await self.update_room_user(self.room, self.user)
@@ -186,7 +182,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def send_room_members(self):
         users = await self.get_room_users()
         form_class = RoomAddMemberView.load_form_class()
-        await self.send(text_data=json.dumps({
+        await self.send_json(content={
             'type': 'room_members',
             'form': str(form_class(room_pk=self.room.pk).as_p()),
             'members': [{
@@ -194,25 +190,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'name': str(user),
                 'html': loader.get_template('whisper/member.html').render({'user': user, 'scope_user': self.user})
             } for user in users],
-        }))
+        })
 
     # Receive message from room group
     async def chat_message(self, event):
         # Send message to WebSocket
-        await self.send(text_data=json.dumps(event))
+        await self.send_json(content=event)
 
     # Receive user_typing from room group
     async def user_typing(self, event):
         # Send user_typing to WebSocket
-        await self.send(text_data=json.dumps(event))
+        await self.send_json(content=event)
 
     # Receive room_properties from room group
     async def room_properties(self, event):
         # Send room_properties to WebSocket
-        await self.send(text_data=json.dumps(event))
+        await self.send_json(content=event)
 
 
-class UnreadChatMessagesConsumer(AsyncWebsocketConsumer):
+class UnreadChatMessagesConsumer(AsyncJsonWebsocketConsumer):
     async def websocket_connect(self, message):
         self.user = self.scope['user']
 
@@ -225,7 +221,7 @@ class UnreadChatMessagesConsumer(AsyncWebsocketConsumer):
             unread_messages = await self.get_unread_messages(self.scope['user'])
 
             # init current socket
-            await self.send(text_data=json.dumps(unread_messages))
+            await self.send_json(content=unread_messages)
 
     @database_sync_to_async
     def get_unread_messages(self, user):
@@ -241,4 +237,4 @@ class UnreadChatMessagesConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         # Send message to WebSocket
         unread_messages = await self.get_unread_messages(self.scope['user'])
-        await self.send(text_data=json.dumps(unread_messages))
+        await self.send_json(content=unread_messages)

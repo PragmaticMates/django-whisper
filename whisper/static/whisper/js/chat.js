@@ -54,16 +54,19 @@ function initSocket(room_slug, scrollItem) {
 
         var rel_room = 'room-' + room_id;
         var room_list_wrapper = $('#page-chat #pills-rooms');
-        var room_item = room_list_wrapper.find('[rel=' + rel_room + ']');
-        if (room_item[0] == null) {
-            var room_item_template = room_list_wrapper.find('.chat-item-template').clone(true);
-            room_item_template = room_item_template.clone(true);
-            room_item_template.html(room_item_template.html().replace('room-name-placeholder', data['room_name']));
-            room_item_template.html(room_item_template.html().replace('room-modified-placeholder', data['room_modified']));
-            room_item_template.html(room_item_template.html().replace('room-slug-placeholder', data['room_slug']));
-            room_item_template.removeClass("chat-item-template");
-            room_item_template.attr('rel', rel_room);
-            room_list_wrapper.prepend(room_item_template);
+        if (room_list_wrapper.length) {
+        if (room_list_wrapper.length) {
+            var room_item = room_list_wrapper.find('[rel=' + rel_room + ']');
+            if (room_item.length === 0) {
+                var room_item_template = room_list_wrapper.find('.chat-item-template').clone(true);
+                room_item_template = room_item_template.clone(true);
+                room_item_template.html(room_item_template.html().replace('room-name-placeholder', data['room_name']));
+                room_item_template.html(room_item_template.html().replace('room-modified-placeholder', data['room_modified']));
+                room_item_template.html(room_item_template.html().replace('room-slug-placeholder', data['room_slug']));
+                room_item_template.removeClass("chat-item-template");
+                room_item_template.attr('rel', rel_room);
+                room_list_wrapper.prepend(room_item_template);
+            }
         }
     }
 
@@ -180,7 +183,6 @@ function initSocket(room_slug, scrollItem) {
         var member_select = member_form.find('select');
 
         if (member_select.val() != null) {
-            console.log(member_select.val());
             socket.send(JSON.stringify({
                 'type': 'add_members',
                 'user_ids': member_select.val()
