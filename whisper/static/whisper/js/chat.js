@@ -233,7 +233,7 @@ function initChat() {
         event.preventDefault();
     });
 
-    $('#chat-room-members-show').click(function (event) {
+    $('.chat-room-members-show').click(function (event) {
         $('.chat-room-members').addClass("show");
         $('.chat-room').removeClass("show");
 

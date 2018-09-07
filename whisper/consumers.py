@@ -138,13 +138,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
             elif json_type == 'add_members':
                 user_ids = content.get('user_ids', None)
+
                 if user_ids is not None:
                     user_ids = list(map(int, user_ids))
                     users = await self.add_room_users(user_ids)
 
-                    dict_message = {'USER_JOINED': {'username': ', '.join(str(user.user) for user in users)}}
-                    await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
-                    await self.send_room_members()
+                    for user in users:
+                        dict_message = {'USER_JOINED': {'username': str(user.user)}}
+                        await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+
+                await self.send_room_members()
 
             else:
                 text = content['message']

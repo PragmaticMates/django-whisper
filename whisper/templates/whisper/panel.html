@@ -59,7 +59,7 @@
         <header class="bg-white">
             <div>
                 <h3 class="m-0"></h3>
-                <small class="user-count"></small>
+                <a class="chat-room-members-show" href="#"><small class="user-count"></small></a>
             </div>
             <div class="d-flex flex-nowrap">
                 <div class="btn-group" role="group">
@@ -73,7 +73,7 @@
                         <a id="update-room" href="#" class="dropdown-item room-action" data-url="{% url 'chat:room_update' '-slug-placeholder-' %}">
                             <i class="fa fa-fw fa-pencil"></i> {% trans 'Update' %}
                         </a>
-                        <a id="chat-room-members-show" href="#" class="dropdown-item">
+                        <a href="#" class="dropdown-item chat-room-members-show">
                             <i class="fal fa-fw fa-user-plus"></i> {% trans 'People' %}
                         </a>
                         <a id="leave-room" href="#" class="dropdown-item">
