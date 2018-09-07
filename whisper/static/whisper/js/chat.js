@@ -6,7 +6,9 @@ function initSocket(room_slug, scrollItem) {
     var message_input = chat_room.find('.message-input');
     var message_submit = chat_room.find('.send-message');
     var leave_room = chat_room.find('#leave-room');
-    var member_list_wrapper = $('.chat-room-members .member-list-wrapper');
+    var chat_members = $('.chat-room-members');
+    var member_list_wrapper = chat_members.find('.member-list-wrapper');
+    var member_form = chat_members.find('.form-wrapper');
     var user_typing = chat_room.find('#user-typing');
     var current_username = messages_wrapper.data('current-username');
     var room_id = null;
@@ -80,11 +82,15 @@ function initSocket(room_slug, scrollItem) {
     }
 
     function handleRoomMembers(data) {
-        var members = data['members'];
+        member_form.html('');
         member_list_wrapper.html('');
+        var members = data['members'];
         members.forEach(function (member) {
             member_list_wrapper.append(member['html']);
         });
+        member_form.append(data['form']);
+        // todo add trigger ...
+        member_form.find('.django-select2').djangoSelect2();
     }
 
     function handleMessage(data, type) {
@@ -167,6 +173,22 @@ function initSocket(room_slug, scrollItem) {
         event.preventDefault();
     });
 
+    $('.chat-room-members footer').on('click', 'button', function (event) {
+        var member_select = member_form.find('select');
+
+        if (member_select.val() != null) {
+            console.log(member_select.val());
+            socket.send(JSON.stringify({
+                'type': 'add_members',
+                'user_ids': member_select.val()
+            }));
+            member_select.val('')
+        }
+
+        event.preventDefault();
+    });
+
+
     return socket;
 }
 
@@ -176,16 +198,12 @@ function initChat() {
     $('#chat-channels-show').click(function (event) {
         $('#page-chat').addClass("show");
         $('.chat-channels').addClass("show");
-        // $('body').addClass("no-scroll-mobile");
-        // $('html').addClass("no-scroll-mobile");
         event.preventDefault();
     });
 
     $('#chat-channels-hide').click(function (event) {
         $('#page-chat').removeClass("show");
         $('.chat-channels').removeClass("show");
-        // $('body').removeClass("no-scroll-mobile");
-        // $('html').removeClass("no-scroll-mobile");
         event.preventDefault();
     });
 

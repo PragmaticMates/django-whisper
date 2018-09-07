@@ -1,7 +1,7 @@
 // variables
 $chat-header-height: 4.615rem !default;
 $chat-width: 24.62rem !default;
-$chat-transition: all 0s ease;
+$chat-transition: all 0s ease !default;
 $chat-border-radius: .3rem !default;
 
 // colors
@@ -160,6 +160,21 @@ $chat-warning: #ffc107 !default;
             padding-bottom: .7rem;
             padding-top: .7rem;
             width: $chat-width;
+        }
+    }
+
+    .chat-room-members {
+        footer {
+            display: flex;
+            flex-direction: column;
+
+            .form-wrapper {
+                width: 100%;
+
+                select {
+                    width: 100%;
+                }
+            }
         }
     }
 }

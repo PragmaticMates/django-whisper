@@ -13,6 +13,7 @@ from django.utils.timezone import now
 from whisper import settings
 from whisper.helpers import ChatMessageHelper
 from whisper.models import Room, Message, RoomUser
+from whisper.views import RoomAddMemberView
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -85,6 +86,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return RoomUser.get_users(self.room)
 
     @database_sync_to_async
+    def add_room_users(self, user_pks):
+        users = []
+
+        user_objects = get_user_model().objects.filter(pk__in=user_pks)
+        print(user_objects)
+
+        for user in user_objects:
+            users.append(self.room.add_user(user))
+
+        return users
+
+    @database_sync_to_async
     def get_room_user(self):
         try:
             return RoomUser.objects.get(room=self.room, user=self.user)
@@ -105,6 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.remove_user_from_room(self.user.pk)
                 dict_message = {'USER_LEFT': {'username': str(self.user), 'room': self.room.name, "timestamp": date(localtime(now()), settings.DATETIME_FORMAT)}}
                 await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+
             elif json_type == 'user_typing':
 
                 for group_name in self.groups:
@@ -115,23 +129,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'text': ChatMessageHelper.message_from_type('USER_TYPING', username=str(self.user))
                         }
                     )
-            elif json_type == 'room_members':
-                users = await self.get_room_users()
 
-                await self.send(text_data=json.dumps({
-                    'type': 'room_members',
-                    'members': [{
-                        'id': user.id,
-                        'name': str(user),
-                        'html': loader.get_template('whisper/member.html').render({'user': user, 'scope_user': self.user})
-                    } for user in users],
-                }))
+            elif json_type == 'room_members':
+                await self.send_room_members()
+
             elif json_type == 'remove_member':
-                user_id = text_data_json.get('user_id', None)
-                user = await self.get_user(user_id)
-                await self.remove_user_from_room(user_id)
+                user_ids = text_data_json.get('user_id', None)
+                user = await self.get_user(user_ids)
+                await self.remove_user_from_room(user_ids)
                 dict_message = {'USER_LEFT': {'username': str(user), 'room': self.room.name, "timestamp": date(localtime(now()), settings.DATETIME_FORMAT)}}
                 await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+
+            elif json_type == 'add_members':
+                user_ids = text_data_json.get('user_ids', None)
+                if user_ids is not None:
+                    user_ids = list(map(int, user_ids))
+                    users = await self.add_room_users(user_ids)
+
+                    dict_message = {'USER_JOINED': {'username': ', '.join(str(user.user) for user in users)}}
+                    await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+                    await self.send_room_members()
+
             else:
                 text = text_data_json['message']
 
@@ -164,6 +182,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'type': 'chat_message',
                         }
                     )
+
+    async def send_room_members(self):
+        users = await self.get_room_users()
+        form_class = RoomAddMemberView.load_form_class()
+        await self.send(text_data=json.dumps({
+            'type': 'room_members',
+            'form': str(form_class(room_pk=self.room.pk).as_p()),
+            'members': [{
+                'id': user.id,
+                'name': str(user),
+                'html': loader.get_template('whisper/member.html').render({'user': user, 'scope_user': self.user})
+            } for user in users],
+        }))
 
     # Receive message from room group
     async def chat_message(self, event):

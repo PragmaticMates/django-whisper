@@ -92,6 +92,13 @@
       padding-bottom: .7rem;
       padding-top: .7rem;
       width: 24.62rem; }
+  #page-chat .chat-room-members footer {
+    display: flex;
+    flex-direction: column; }
+    #page-chat .chat-room-members footer .form-wrapper {
+      width: 100%; }
+      #page-chat .chat-room-members footer .form-wrapper select {
+        width: 100%; }
 
 .message-input-wrapper {
   flex-grow: 1;

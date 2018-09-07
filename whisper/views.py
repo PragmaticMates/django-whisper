@@ -38,10 +38,14 @@ class RoomAddMemberView(LoginRequiredMixin, UpdateView):
     fields = ['users']
     template_name = 'whisper/add_member_form.html'
 
-    def get_form_class(self):
+    @staticmethod
+    def load_form_class():
         form_class = settings.ROOM_ADD_MEMBER_FORM_CLASS
 
         if form_class:
             form_class = import_string(form_class)
 
         return form_class
+
+    def get_form_class(self):
+        return self.load_form_class()

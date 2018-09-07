@@ -54,8 +54,8 @@ class RoomUser(models.Model):
     last_notified = models.DateTimeField(_('last notified'), default=now)
 
     @staticmethod
-    def get_possible_users_to_add(room):
-        return get_user_model().objects.exclude(roomuser__room=room)
+    def get_possible_users_to_add(room_pk):
+        return get_user_model().objects.exclude(roomuser__room__pk=room_pk)
 
     @staticmethod
     def get_users(room):
