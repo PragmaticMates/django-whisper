@@ -84,13 +84,16 @@ function initSocket(room_slug, scrollItem) {
     function handleRoomMembers(data) {
         member_form.html('');
         member_list_wrapper.html('');
+
         var members = data['members'];
         members.forEach(function (member) {
             member_list_wrapper.append(member['html']);
         });
         member_form.append(data['form']);
-        // todo add trigger ...
-        member_form.find('.django-select2').djangoSelect2();
+
+        var event = $.Event('chatformattached');
+        event.selector = '.chat-room-members .form-wrapper';
+        $(window).trigger(event);
     }
 
     function handleMessage(data, type) {
