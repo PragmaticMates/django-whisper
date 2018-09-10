@@ -50,7 +50,7 @@ class ChatMessageHelper:
             params = message.get(message_key)
             return ChatMessageHelper.message_from_type(message_key, **params)
         except JSONDecodeError:
-            return text_message
+            return str(text_message)
 
     @staticmethod
     def message_from_type(type, **params):
