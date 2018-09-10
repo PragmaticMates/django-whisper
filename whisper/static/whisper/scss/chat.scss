@@ -137,12 +137,7 @@ $chat-warning: #ffc107 !default;
     }
 
     .chat-room, .chat-room-members {
-        display: none;
         flex-direction: column;
-
-        &.show {
-            display: flex;
-        }
 
         header {
             line-height: normal;
@@ -155,7 +150,6 @@ $chat-warning: #ffc107 !default;
 
         footer {
             height: initial;
-            //max-height: 12rem;
             min-height: $chat-header-height;
             padding-bottom: .7rem;
             padding-top: .7rem;
@@ -163,7 +157,31 @@ $chat-warning: #ffc107 !default;
         }
     }
 
+    .chat-room {
+        display: flex;
+
+        &.show {
+            margin-left: 0;
+
+            &.hide-left {
+                margin-left: -$chat-width;
+            }
+        }
+    }
+
     .chat-room-members {
+        display: none;
+
+        &.show {
+            display: flex;
+        }
+
+        .member-list-wrapper {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
         footer {
             display: flex;
             flex-direction: column;

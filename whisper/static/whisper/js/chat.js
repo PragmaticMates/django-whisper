@@ -235,7 +235,7 @@ function initChat() {
 
     $('.chat-room-members-show').click(function (event) {
         $('.chat-room-members').addClass("show");
-        $('.chat-room').removeClass("show");
+        $('.chat-room').addClass("hide-left");
 
         if (socket) {
             socket.send(JSON.stringify({
@@ -248,7 +248,7 @@ function initChat() {
 
     $('#chat-room-members-hide').click(function (event) {
         $('.chat-room-members').removeClass("show");
-        $('.chat-room').addClass("show");
+        $('.chat-room').removeClass("hide-left");
         event.preventDefault();
     });
 
