@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,7 +21,7 @@ class Room(models.Model):
         verbose_name = _('room')
         verbose_name_plural = _('rooms')
         ordering = ('-modified',)
-        default_permissions = settings.DEFAULT_PERMISSIONS
+        get_latest_by = 'created'
 
     def __str__(self):
         return self.name
@@ -42,6 +41,10 @@ class Room(models.Model):
             user_groups.append(f'unread-chat-messages-{member.user.pk}')
 
         return user_groups
+
+    @property
+    def is_user_to_user_room(self):
+        return self.slug.startswith('users-')
 
     def add_user(self, user):
         return RoomUser.objects.get_or_create(room=self, user=user)[0]
@@ -81,7 +84,6 @@ class Message(models.Model):
         verbose_name = _('message')
         verbose_name_plural = _('messages')
         ordering = ('created',)
-        default_permissions = settings.DEFAULT_PERMISSIONS
 
     def __str__(self):
         return self.text
