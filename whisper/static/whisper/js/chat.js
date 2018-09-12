@@ -1,3 +1,5 @@
+var chat_socket = null;
+
 function initSocket(room_slug, scrollItem) {
     var chat_room = $('.chat-room');
     var chat_room_header = chat_room.find('h3');
@@ -6,11 +8,13 @@ function initSocket(room_slug, scrollItem) {
     var message_input = chat_room.find('.message-input');
     var message_submit = chat_room.find('.send-message');
     var leave_room = chat_room.find('#leave-room');
-    var chat_members = $('.chat-room-members');
-    var member_list_wrapper = chat_members.find('.member-list-wrapper');
-    var member_form = chat_members.find('.form-wrapper');
+    var chat_room_members = $('.chat-room-members');
+    var member_list_wrapper = chat_room_members.find('.member-list-wrapper');
+    var member_form = chat_room_members.find('.form-wrapper');
+    var chat_room_members_footer = $('.chat-room-members footer');
     var user_typing = chat_room.find('#user-typing');
     var current_username = messages_wrapper.data('current-username');
+    var room_action = chat_room.find('.room-action');
     var room_id = null;
 
     var chat_url = '/ws/chat/' + room_slug + '/';
@@ -29,6 +33,8 @@ function initSocket(room_slug, scrollItem) {
             handleUserTyping(data);
         } else if (type == 'room_members') {
             handleRoomMembers(data);
+        } else if (type == 'new_room') {
+            handleNewRoom(data);
         } else {
             handleMessage(data, type);
         }
@@ -52,6 +58,12 @@ function initSocket(room_slug, scrollItem) {
         var localized_message = ngettext('member', 'members', user_count);
         chat_room_user_count.html(user_count + ' ' + localized_message);
 
+        if (data['is_user_to_user']) {
+            leave_room.hide();
+        } else {
+            leave_room.show();
+        }
+
         var rel_room = 'room-' + room_id;
         var room_list_wrapper = $('#page-chat #pills-rooms');
         if (room_list_wrapper.length) {
@@ -67,6 +79,17 @@ function initSocket(room_slug, scrollItem) {
                 room_list_wrapper.prepend(room_item_template);
             }
         }
+    }
+
+    function handleNewRoom(data) {
+        var slug = data['slug'];
+
+        hideRoomMembers();
+
+        if (chat_socket) {
+            chat_socket.close();
+        }
+        chat_socket = initSocket(slug, null);
     }
 
     function handleUserTyping(data) {
@@ -166,13 +189,15 @@ function initSocket(room_slug, scrollItem) {
         hideChatRoom(socket);
     });
 
-    $('.chat-room .room-action').click(function (e) {
+    room_action.unbind('click');
+    room_action.click(function (e) {
         var url = $(this).data('url');
         url = url.replace('-slug-placeholder-', room_slug);
         $(this).attr('href', url);
     });
 
-    $('.chat-room-members').on('click', '.remove-member', function (event) {
+    chat_room_members.unbind('click');
+    chat_room_members.on('click', '.remove-member', function (event) {
         socket.send(JSON.stringify({
             'type': 'remove_member',
             'user_id': $(this).data('user-id')
@@ -182,7 +207,9 @@ function initSocket(room_slug, scrollItem) {
         event.preventDefault();
     });
 
-    $('.chat-room-members footer').on('click', 'button', function (event) {
+
+    chat_room_members_footer.unbind('click');
+    chat_room_members_footer.on('click', 'button', function (event) {
         var member_select = member_form.find('select');
 
         if (member_select.val() != null) {
@@ -205,7 +232,7 @@ function initSocket(room_slug, scrollItem) {
 }
 
 function initChat() {
-    var socket = null;
+    chat_socket = null;
 
     $('#chat-channels-show').click(function (event) {
         $('#page-chat').addClass("show");
@@ -227,7 +254,7 @@ function initChat() {
         var room_slug = $(this).data('room-slug');
 
         if (room_slug) {
-            socket = initSocket(room_slug, null);
+            chat_socket = initSocket(room_slug, null);
         }
 
         event.preventDefault();
@@ -237,24 +264,22 @@ function initChat() {
         $('.chat-room-members').addClass("show");
         $('.chat-room').addClass("hide-left");
 
-        if (socket) {
-            socket.send(JSON.stringify({
+        if (chat_socket) {
+            chat_socket.send(JSON.stringify({
                 'type': 'room_members'
             }));
         }
-
         event.preventDefault();
     });
 
     $('#chat-room-members-hide').click(function (event) {
-        $('.chat-room-members').removeClass("show");
-        $('.chat-room').removeClass("hide-left");
+        hideRoomMembers();
         event.preventDefault();
     });
 
 
     $('#chat-room-hide').click(function (event) {
-        hideChatRoom(socket);
+        hideChatRoom(chat_socket);
         event.preventDefault();
     });
 }
@@ -332,4 +357,10 @@ function hideChatRoom(socket) {
     if (socket) {
         socket.close();
     }
+}
+
+function hideRoomMembers() {
+    console.log('hideRoomMembers');
+    $('.chat-room-members').removeClass("show");
+    $('.chat-room').removeClass("hide-left");
 }

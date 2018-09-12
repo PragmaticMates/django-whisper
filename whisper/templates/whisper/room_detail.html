@@ -24,7 +24,7 @@
             var room_slug = '{{ room.slug }}';
 
             if (room_slug) {
-                socket = initSocket(room_slug, $("html, body"));
+                chat_socket = initSocket(room_slug, $("html, body"));
             }
         });
     </script>

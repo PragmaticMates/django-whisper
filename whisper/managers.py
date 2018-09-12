@@ -1,6 +1,8 @@
 from datetime import timedelta
 
 from django.apps import apps
+from django.db import transaction
+
 from whisper import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -23,7 +25,33 @@ class RoomQuerySet(QuerySet):
 
         return room
 
-    def get_room_name_and_users_from_slug(self, slug):
+    @transaction.atomic
+    def create_group(self):
+        room = self.create()
+        room.slug = "group-" + str(room.pk)
+        room.name = "Group #" + str(room.pk)
+        room.save(update_fields=['slug', 'name'])
+        return room
+
+    def get_or_create_from_users(self, user_ids):
+        users_room = self.filter(slug__startswith='group').annotate(cnt=Count('users')).filter(cnt=len(user_ids))
+
+        for user_id in user_ids:
+            users_room = users_room.filter(users__pk=user_id)
+
+        if users_room:
+            return users_room.latest()
+        else:
+            new_room = self.create_group()
+
+            from whisper.models import RoomUser
+            for user_id in user_ids:
+                RoomUser.objects.get_or_create(room=new_room, user_id=user_id, defaults={'last_read': now()})
+
+            return new_room
+
+    @staticmethod
+    def get_room_name_and_users_from_slug(slug):
         slug_parts = slug.split('-', 1)
         subject = slug_parts[0]
         users = get_user_model().objects.none()

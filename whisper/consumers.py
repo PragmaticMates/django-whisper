@@ -42,7 +42,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             'room_id': self.room.pk,
             'room_slug': room_slug,
             'room_modified': date(localtime(self.room.modified), settings.DATETIME_FORMAT),
-            'user_count': self.user_count
+            'user_count': self.user_count,
+            'is_user_to_user': self.room.is_user_to_user_room
         })
 
         # init room with previous messages
@@ -105,6 +106,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     def update_room_user(self, room, user):
         RoomUser.objects.update_or_create(room=room, user=user, defaults={'last_read': now()})
 
+    @database_sync_to_async
+    def get_or_create_group_room(self, user_ids):
+        user_ids.extend(list(self.room.users.all().values_list('pk', flat=True)))
+        return Room.objects.get_or_create_from_users(user_ids)
+
     # Receive message from WebSocket
     async def receive_json(self, content):
         if self.user.is_authenticated:
@@ -141,13 +147,25 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
                 if user_ids is not None:
                     user_ids = list(map(int, user_ids))
-                    users = await self.add_room_users(user_ids)
 
-                    for user in users:
-                        dict_message = {'USER_JOINED': {'username': str(user.user)}}
-                        await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+                    if self.room.is_user_to_user_room:
+                        new_room = await self.get_or_create_group_room(user_ids)
 
-                await self.send_room_members()
+                        for group_name in self.groups:
+                            await self.channel_layer.group_send(
+                                group_name, {
+                                    'type': 'new_room',
+                                    'slug': new_room.slug,
+                                }
+                            )
+                    else:
+                        users = await self.add_room_users(user_ids)
+
+                        for user in users:
+                            dict_message = {'USER_JOINED': {'username': str(user.user)}}
+                            await ChatMessageHelper.send_message(self.room, json.dumps(dict_message))
+
+                        await self.send_room_members()
 
             else:
                 text = content['message']
@@ -191,7 +209,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             'members': [{
                 'id': user.id,
                 'name': str(user),
-                'html': loader.get_template('whisper/member.html').render({'user': user, 'scope_user': self.user})
+                'html': loader.get_template('whisper/member.html').render(
+                    {'user': user, 'scope_user': self.user, 'is_user_to_user': self.room.is_user_to_user_room}
+                )
             } for user in users],
         })
 
@@ -208,6 +228,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     # Receive room_properties from room group
     async def room_properties(self, event):
         # Send room_properties to WebSocket
+        await self.send_json(content=event)
+
+    # Receive new_room from room group
+    async def new_room(self, event):
+        # Send new_room to WebSocket
         await self.send_json(content=event)
 
 

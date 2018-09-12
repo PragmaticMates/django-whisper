@@ -1,7 +1,7 @@
 <div class="chat-item position-relative">
     {% include 'whisper/user.html' %}
     <div class="chat-room-show position-absolute align-items-center d-flex h-100 justify-content-end h-100 w-100">
-        {% if scope_user != user %}
+        {% if scope_user != user and not is_user_to_user %}
             <a class="remove-member" href="#" data-user-name="{{ user }}" data-user-id="{{ user.pk }}">
                 <i class="fas fa-times"></i>
             </a>
