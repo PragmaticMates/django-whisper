@@ -35,6 +35,10 @@ DATETIME_FORMAT = getattr(
     settings, 'WHISPER_DATETIME_FORMAT', 'd.m.Y H:i:s'
 )
 
+DEFAULT_PERMISSIONS = getattr(
+    settings, 'WHISPER_DEFAULT_PERMISSIONS', ('add', 'change', 'delete', 'view')
+)
+
 MESSAGE_TYPES = getattr(
     settings, 'WHISPER_MESSAGE_TYPES',
     {
