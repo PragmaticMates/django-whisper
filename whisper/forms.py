@@ -45,8 +45,6 @@ class RoomAddMemberForm(forms.ModelForm):
 
         if self.instance.is_user_to_user_room:
             users = list(users.values_list('pk', flat=True))
-            current_users = list(current_users.values_list('id', flat=True))
-            users.extend(current_users)
             return Room.objects.get_or_create_from_users(users)
         else:
             for current_user in current_users:
