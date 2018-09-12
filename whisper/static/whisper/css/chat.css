@@ -1,4 +1,4 @@
-#page-chat {
+.whisper #page-chat {
   background-color: #fff;
   display: flex;
   height: 100%;
@@ -13,44 +13,44 @@
   -o-transition: all 0s ease;
   -webkit-overflow-scrolling: touch;
   z-index: 999; }
-  #page-chat.show {
+  .whisper #page-chat.show {
     right: 0; }
-  #page-chat .nav-item {
+  .whisper #page-chat .nav-item {
     margin-right: .5rem; }
-    #page-chat .nav-item .nav-link {
+    .whisper #page-chat .nav-item .nav-link {
       align-items: center;
       height: 4.615rem;
       display: flex;
       border-bottom: 0.154rem solid transparent;
       border-top: 0.154rem solid transparent; }
-      #page-chat .nav-item .nav-link.active {
+      .whisper #page-chat .nav-item .nav-link.active {
         border-bottom-color: #007bff; }
-  #page-chat .chat-item {
+  .whisper #page-chat .chat-item {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
     display: flex;
     height: 4.615rem;
     flex-direction: column;
     justify-content: center; }
-    #page-chat .chat-item.chat-item-template {
+    .whisper #page-chat .chat-item.chat-item-template {
       display: none; }
-    #page-chat .chat-item.has-unread-messages > div span:first-child {
+    .whisper #page-chat .chat-item.has-unread-messages > div span:first-child {
       color: #007bff; }
-    #page-chat .chat-item.has-unread-messages > div .badge {
+    .whisper #page-chat .chat-item.has-unread-messages > div .badge {
       display: block; }
-    #page-chat .chat-item .chat-room-show:hover {
+    .whisper #page-chat .chat-item .chat-room-show:hover {
       background-color: rgba(52, 58, 64, 0.05); }
-    #page-chat .chat-item > div {
+    .whisper #page-chat .chat-item > div {
       padding: 0 2.692rem;
       display: flex;
       justify-content: space-between; }
-      #page-chat .chat-item > div span:first-child {
+      .whisper #page-chat .chat-item > div span:first-child {
         color: #343a40;
         display: -webkit-box;
         max-height: 2.69rem;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden; }
-      #page-chat .chat-item > div .badge {
+      .whisper #page-chat .chat-item > div .badge {
         align-self: center;
         display: none;
         font-size: 0.77rem;
@@ -59,81 +59,81 @@
         line-height: 1.31rem;
         padding: 0;
         min-width: 1.31rem; }
-    #page-chat .chat-item .user-info {
+    .whisper #page-chat .chat-item .user-info {
       padding: 0 2.692rem; }
-  #page-chat .chat-room, #page-chat .chat-channels, #page-chat .chat-room-members {
+  .whisper #page-chat .chat-room, .whisper #page-chat .chat-channels, .whisper #page-chat .chat-room-members {
     transition: all 0s ease;
     display: block;
     height: 100%;
     flex-basis: 100%;
     min-width: 100%;
     width: 100%; }
-  #page-chat .chat-channels {
+  .whisper #page-chat .chat-channels {
     margin-left: -24.62rem; }
-    #page-chat .chat-channels .tab-content {
+    .whisper #page-chat .chat-channels .tab-content {
       height: calc(100% - 4.615rem);
       overflow-y: auto;
       overflow-x: hidden; }
-    #page-chat .chat-channels.show {
+    .whisper #page-chat .chat-channels.show {
       margin-left: 0; }
-  #page-chat .chat-room, #page-chat .chat-room-members {
+  .whisper #page-chat .chat-room, .whisper #page-chat .chat-room-members {
     flex-direction: column; }
-    #page-chat .chat-room header, #page-chat .chat-room-members header {
+    .whisper #page-chat .chat-room header, .whisper #page-chat .chat-room-members header {
       line-height: normal;
       min-height: 4.615rem; }
-      #page-chat .chat-room header h3, #page-chat .chat-room-members header h3 {
+      .whisper #page-chat .chat-room header h3, .whisper #page-chat .chat-room-members header h3 {
         font-size: 1.2rem; }
-    #page-chat .chat-room footer, #page-chat .chat-room-members footer {
+    .whisper #page-chat .chat-room footer, .whisper #page-chat .chat-room-members footer {
       height: initial;
       min-height: 4.615rem;
       padding-bottom: .7rem;
       padding-top: .7rem;
       width: 24.62rem; }
-  #page-chat .chat-room {
+  .whisper #page-chat .chat-room {
     display: flex; }
-    #page-chat .chat-room.show {
+    .whisper #page-chat .chat-room.show {
       margin-left: 0; }
-      #page-chat .chat-room.show.hide-left {
+      .whisper #page-chat .chat-room.show.hide-left {
         margin-left: -24.62rem; }
-  #page-chat .chat-room-members {
+  .whisper #page-chat .chat-room-members {
     display: none; }
-    #page-chat .chat-room-members.show {
+    .whisper #page-chat .chat-room-members.show {
       display: flex; }
-    #page-chat .chat-room-members .member-list-wrapper {
+    .whisper #page-chat .chat-room-members .member-list-wrapper {
       flex: 1;
       overflow-x: hidden;
       overflow-y: auto; }
-    #page-chat .chat-room-members footer {
+    .whisper #page-chat .chat-room-members footer {
       display: flex;
       flex-direction: column; }
-      #page-chat .chat-room-members footer .form-wrapper {
+      .whisper #page-chat .chat-room-members footer .form-wrapper {
         width: 100%; }
-        #page-chat .chat-room-members footer .form-wrapper select {
+        .whisper #page-chat .chat-room-members footer .form-wrapper select {
           width: 100%; }
 
-.message-input-wrapper {
+.whisper .message-input-wrapper {
   flex-grow: 1;
   position: relative; }
-  .message-input-wrapper textarea {
+  .whisper .message-input-wrapper textarea {
     padding-right: 1.9rem;
     resize: none; }
-  .message-input-wrapper .send-message {
+  .whisper .message-input-wrapper .send-message {
     bottom: .4rem;
     color: #17a2b8;
     position: absolute;
     right: .5rem; }
 
-.message-list-wrapper {
+.whisper .message-list-wrapper {
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto; }
-  .message-list-wrapper .message-list {
+  .whisper .message-list-wrapper .message-list {
     padding-bottom: .3rem; }
-    .message-list-wrapper .message-list .message {
+    .whisper .message-list-wrapper .message-list .message {
       align-items: flex-start;
       display: flex;
       flex-direction: column; }
-      .message-list-wrapper .message-list .message > span {
+      .whisper .message-list-wrapper .message-list .message > span {
         background-color: white;
         border-radius: 0.3rem;
         display: inline-block;
@@ -143,7 +143,7 @@
         padding: .5rem 1rem;
         position: relative;
         white-space: pre-wrap; }
-        .message-list-wrapper .message-list .message > span:after {
+        .whisper .message-list-wrapper .message-list .message > span:after {
           border: .6rem solid;
           border-color: white white transparent transparent;
           bottom: auto;
@@ -154,23 +154,23 @@
           right: auto;
           width: 0;
           top: .7rem; }
-      .message-list-wrapper .message-list .message > small {
+      .whisper .message-list-wrapper .message-list .message > small {
         margin: 0 2rem; }
-      .message-list-wrapper .message-list .message.my {
+      .whisper .message-list-wrapper .message-list .message.my {
         align-items: flex-end; }
-        .message-list-wrapper .message-list .message.my > span {
+        .whisper .message-list-wrapper .message-list .message.my > span {
           background-color: #17a2b8;
           color: #fff; }
-          .message-list-wrapper .message-list .message.my > span:after {
+          .whisper .message-list-wrapper .message-list .message.my > span:after {
             border-color: #17a2b8 transparent transparent #17a2b8;
             left: auto;
             right: -1rem; }
-      .message-list-wrapper .message-list .message.system > span {
+      .whisper .message-list-wrapper .message-list .message.system > span {
         background-color: #ffc107;
         color: #fff; }
-        .message-list-wrapper .message-list .message.system > span:after {
+        .whisper .message-list-wrapper .message-list .message.system > span:after {
           border-color: #ffc107 #ffc107 transparent transparent; }
-  .message-list-wrapper #user-typing {
+  .whisper .message-list-wrapper #user-typing {
     display: block;
     height: 1.15rem;
     margin: 0 2rem; }
