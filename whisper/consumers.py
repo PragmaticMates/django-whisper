@@ -50,7 +50,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         for message in await self.get_room_messages():
             await self.send_json(content={
                 'type': type,
-                'message': message.text if message.user is not None else ChatMessageHelper.localized_message_from_json(message.text),
+                'message': str(message),
                 'timestamp': date(localtime(message.created), settings.DATETIME_FORMAT),
                 'username': str(message.user) if message.user is not None else None,
             })

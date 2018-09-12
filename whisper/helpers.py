@@ -27,7 +27,7 @@ class ChatMessageHelper:
         await channel_layer.group_send(
             room.group_name, {
                 'type': 'chat_message',
-                'message': text_message if message.user is not None else ChatMessageHelper.localized_message_from_json(text_message),
+                'message': str(message),
                 'username': str(sender) if sender is not None else None,
                 'timestamp': date(localtime(message.created), settings.DATETIME_FORMAT)
             }
@@ -41,16 +41,6 @@ class ChatMessageHelper:
             )
 
         await ChatMessageHelper.send_room_properties(room, channel_layer)
-
-    @staticmethod
-    def localized_message_from_json(text_message):
-        try:
-            message = json.loads(text_message)
-            message_key = next(iter(message))
-            params = message.get(message_key)
-            return ChatMessageHelper.message_from_type(message_key, **params)
-        except JSONDecodeError:
-            return str(text_message)
 
     @staticmethod
     def message_from_type(type, **params):

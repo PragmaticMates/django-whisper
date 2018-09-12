@@ -1,3 +1,6 @@
+import json
+from json import JSONDecodeError
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -86,7 +89,19 @@ class Message(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return self.text
+        if self.user is not None:
+            # non-system message
+            return self.text
+
+        # system message
+        from whisper.helpers import ChatMessageHelper
+        try:
+            message = json.loads(self.text)
+            message_key = next(iter(message))
+            params = message.get(message_key)
+            return ChatMessageHelper.message_from_type(message_key, **params)
+        except JSONDecodeError:
+            return str(self.text)
 
     def get_absolute_url(self):
         return self.room.get_absolute_url()
