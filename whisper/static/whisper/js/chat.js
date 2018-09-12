@@ -360,7 +360,6 @@ function hideChatRoom(socket) {
 }
 
 function hideRoomMembers() {
-    console.log('hideRoomMembers');
     $('.chat-room-members').removeClass("show");
     $('.chat-room').removeClass("hide-left");
 }
