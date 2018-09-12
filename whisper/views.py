@@ -33,11 +33,7 @@ class RoomUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_form_class(self):
         form_class = settings.ROOM_FORM_CLASS
-
-        if form_class:
-            form_class = import_string(form_class)
-
-        return form_class
+        return import_string(form_class) if form_class else super().get_form_class()
 
 
 class RoomAddMemberView(LoginRequiredMixin, UpdateView):

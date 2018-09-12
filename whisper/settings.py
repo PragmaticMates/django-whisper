@@ -8,7 +8,7 @@ ROOM_FORM_CLASS = getattr(
 )
 
 ROOM_ADD_MEMBER_FORM_CLASS = getattr(
-    settings, 'WHISPER_ROOM_ADD_MEMBER_FORM_CLASS', None
+    settings, 'WHISPER_ROOM_ADD_MEMBER_FORM_CLASS', 'whisper.forms.RoomAddMemberForm'
 )
 
 USER_ACTIVITY_ATTRIBUTE = getattr(

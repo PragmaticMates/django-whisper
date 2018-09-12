@@ -116,7 +116,7 @@ function initSocket(room_slug, scrollItem) {
         });
         member_form.append(data['form']);
 
-        var event = $.Event('chatformattached');
+        var event = $.Event('whisper.form.attached');
         event.selector = '.chat-room-members .form-wrapper';
         $(window).trigger(event);
     }

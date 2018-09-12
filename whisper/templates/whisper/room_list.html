@@ -1,29 +1,25 @@
-{% extends 'layout.html' %}
 {% load i18n static %}
 
-{% block title %}{% trans 'Chat rooms' %}{% endblock %}
+<h1>{% trans 'Chat rooms' %}</h1>
 
-{% block content %}
-
-    {% if room_list %}
-        <div class="row">
-            <div class="col-md-3 col-sm-12 grid-container box-with-shadow p-0">
-                {% for room in room_list %}
-                    <a class="box-with-bottom-shadow d-flex align-items-center justify-content-between p-4 bg-dark-translucent-hover" href="{{ room.get_absolute_url }}">
-                        <div>
-                            <b class="text-dark">{{ room.name }}</b>
-                            <small class="d-block text-secondary">{{ room.modified }}</small>
-                        </div>
-                        {% if room.unread_messages > 0 %}
-                            <span class="badge badge-primary rounded-circle ml-1">{{ room.unread_messages }}</span>
-                        {% endif %}
-                    </a>
-                {% endfor %}
-            </div>
+{% if room_list %}
+    <div class="row">
+        <div class="col-md-3 col-sm-12 grid-container box-with-shadow p-0">
+            {% for room in room_list %}
+                <a class="box-with-bottom-shadow d-flex align-items-center justify-content-between p-4 bg-dark-translucent-hover" href="{{ room.get_absolute_url }}">
+                    <div>
+                        <b class="text-dark">{{ room.name }}</b>
+                        <small class="d-block text-secondary">{{ room.modified }}</small>
+                    </div>
+                    {% if room.unread_messages > 0 %}
+                        <span class="badge badge-primary rounded-circle ml-1">{{ room.unread_messages }}</span>
+                    {% endif %}
+                </a>
+            {% endfor %}
         </div>
-    {% else %}
-        <p class="p-4">
-            {% trans 'No data found' %}
-        </p>
-    {% endif %}
-{% endblock %}
+    </div>
+{% else %}
+    <p class="p-4">
+        {% trans 'No data found' %}
+    </p>
+{% endif %}

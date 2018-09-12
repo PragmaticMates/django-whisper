@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<h1>{% trans 'Add member to room' %} {{ room.slug }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="{% trans 'Save' %}">
+</form>
+
