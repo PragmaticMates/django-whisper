@@ -212,7 +212,7 @@ function initSocket(room_slug, scrollItem) {
     chat_room_members_footer.on('click', 'button', function (event) {
         var member_select = member_form.find('select');
 
-        if (member_select.val() != null) {
+        if (Array.isArray(member_select.val()) && member_select.val().length) {
             if (socket.readyState === socket.OPEN) {
                 socket.send(JSON.stringify({
                     'type': 'add_members',
