@@ -101,7 +101,8 @@ class RoomQuerySet(QuerySet):
                 Count('message__pk',
                 filter=Q(
                     Q(message__room__member__user=user, message__created__gt=F('message__room__member__last_read')),
-                    ~Q(message__user=user)
+                    ~Q(message__user=user),
+                    ~Q(message__user=None),
                 )
             )
         )

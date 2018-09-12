@@ -7,7 +7,7 @@
     {{ room }}:
 
     {% for message in room.unread_messages %}
-        {{ message.user }} at {{ message.created }}: {{ message.text }}
+        {{ message.user|default:'' }} at {{ message.created }}: {{ message.text }}
     {% endfor %}
 
     {% trans 'Read more at this URL:' %} {% uri room.get_absolute_url %}
