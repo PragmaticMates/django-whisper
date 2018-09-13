@@ -172,8 +172,8 @@ class MessageQuerySet(QuerySet):
         if not user.is_authenticated:
             return self.none()
 
-        return self\
-            .exclude(user=user)\
+        return self \
+            .exclude(Q(user=user) | Q(user=None)) \
             .filter(
                 room__member__user=user,
                 created__gt=F('room__member__last_read')
