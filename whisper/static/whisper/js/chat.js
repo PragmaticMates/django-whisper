@@ -246,7 +246,7 @@ function initChat() {
         event.preventDefault();
     });
 
-    $('.tab-content').on('click', '.chat-room-show', function (event) {
+    $('body').on('click', '.chat-room-show', function (event) {
         $('#page-chat').addClass("show");
         $('.chat-room').addClass("show");
         $('.chat-channels').removeClass("show");
