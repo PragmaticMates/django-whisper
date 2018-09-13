@@ -82,7 +82,12 @@
       line-height: normal;
       min-height: 4.615rem; }
       .whisper #page-chat .chat-room header h3, .whisper #page-chat .chat-room-members header h3 {
-        font-size: 1.2rem; }
+        display: -webkit-box;
+        font-size: 1.2rem;
+        max-height: 3rem;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden; }
     .whisper #page-chat .chat-room footer, .whisper #page-chat .chat-room-members footer {
       height: initial;
       min-height: 4.615rem;
