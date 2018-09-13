@@ -41,6 +41,15 @@ class RoomAddMemberView(LoginRequiredMixin, UpdateView):
     fields = ['users']
     template_name = 'whisper/add_member_form.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.user = request.user
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'current_user': self.user})
+        return kwargs
+
     @staticmethod
     def load_form_class():
         form_class = settings.ROOM_ADD_MEMBER_FORM_CLASS

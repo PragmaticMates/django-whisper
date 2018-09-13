@@ -16,9 +16,10 @@ class RoomAddMemberForm(forms.ModelForm):
         model = Room
         fields = ['users']
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, current_user=None, *args, **kwargs):
         room_pk = kwargs.pop('room_pk', None)
         super().__init__(*args, **kwargs)
+        self.current_user = current_user
 
         if room_pk is not None:
             self.possible_users = RoomUser.get_possible_users_to_add(room_pk)
@@ -36,6 +37,9 @@ class RoomAddMemberForm(forms.ModelForm):
 
         if self.instance.is_user_to_user_room and not current_users.issubset(users):
             self.add_error('users', _('Cannot remove users from user to user chat'))
+
+        if self.current_user.pk not in users:
+            self.add_error('users', _('Cannot remove yourself from chat'))
 
         return cleaned_data
 
