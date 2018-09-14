@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-14 09:09+0200\n"
-"PO-Revision-Date: 2018-09-14 09:12+0200\n"
+"PO-Revision-Date: 2018-09-14 18:40+0200\n"
 "Last-Translator: b'Name 1 <erik@pragmaticmates.com>'\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -149,7 +149,7 @@ msgstr "Možnosti miestnosti"
 
 #: templates/whisper/panel.html:119
 msgid "Add users"
-msgstr "Všetci užívatelia"
+msgstr "Pridať užívateľov"
 
 #: templates/whisper/room_detail.html:3 templates/whisper/room_form.html:3
 msgid "Chat room"
