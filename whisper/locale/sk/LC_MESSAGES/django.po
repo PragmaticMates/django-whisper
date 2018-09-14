@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 13:47+0200\n"
-"PO-Revision-Date: 2018-09-04 15:05+0200\n"
+"POT-Creation-Date: 2018-09-14 09:09+0200\n"
+"PO-Revision-Date: 2018-09-14 09:12+0200\n"
 "Last-Translator: b'Name 1 <erik@pragmaticmates.com>'\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -27,64 +27,80 @@ msgstr "Chat"
 msgid "You have unread chat messages"
 msgstr "Máš neprečítané správy"
 
-#: models.py:14
+#: forms.py:39
+msgid "Cannot remove users from user to user chat"
+msgstr "Z miestnosti typu užívateľ-užívateľ nemožno odstrániť členov"
+
+#: forms.py:42
+msgid "Cannot remove yourself from chat"
+msgstr "Nemôžeš odstrániť sám seba z chatu"
+
+#: models.py:17
 msgid "name"
 msgstr "meno"
 
-#: models.py:15
+#: models.py:18
 msgid "users"
 msgstr "užívatelia"
 
-#: models.py:16 models.py:68
+#: models.py:19 models.py:82
 msgid "created"
 msgstr "vytvorené"
 
-#: models.py:17 models.py:69
+#: models.py:20 models.py:83
 msgid "modified"
 msgstr "upravené"
 
-#: models.py:21
+#: models.py:24
 msgid "room"
 msgstr "miestnosť"
 
-#: models.py:22
+#: models.py:25
 msgid "rooms"
 msgstr "miestnosti"
 
-#: models.py:52
+#: models.py:59
 msgid "last read"
 msgstr "naposledy prečítané"
 
-#: models.py:53
+#: models.py:60
 msgid "last notified"
 msgstr "naposledy notifikovaný"
 
-#: models.py:67
+#: models.py:81
 msgid "text"
 msgstr "text"
 
-#: models.py:73
+#: models.py:87
 msgid "message"
 msgstr "správa"
 
-#: models.py:74
+#: models.py:88
 msgid "messages"
 msgstr "správy"
 
-#: settings.py:36
+#: settings.py:41
 #, python-brace-format
 msgid "{username} left room"
 msgstr "{username} opustil miestnosť"
 
-#: settings.py:37
+#: settings.py:42
 #, python-brace-format
 msgid "{username} joined room"
 msgstr "{username} sa pripojil do miestnosti"
 
-#: settings.py:38
+#: settings.py:43
 #, python-brace-format
 msgid "{username} is typing ..."
 msgstr "{username} píše …"
+
+#: templates/whisper/add_member_form.html:3
+msgid "Add member to room"
+msgstr "Pridať člena do miestnosti"
+
+#: templates/whisper/add_member_form.html:8 templates/whisper/room_form.html:8
+msgid "Save"
+msgstr "Uložiť"
 
 #: templates/whisper/mails/notification.txt:2
 #, python-format
@@ -99,17 +115,53 @@ msgstr "Kým si bol nedostupný, niektorí užívatelia ti poslali niekoľko spr
 msgid "Read more at this URL:"
 msgstr "Čítajte viac na tejto URL:"
 
-#: templates/whisper/room_detail.html:4 templates/whisper/room_form.html:3
-msgid "Chat room"
-msgstr "Chatovacia miestnosť"
+#: templates/whisper/panel.html:9
+msgid "Users"
+msgstr "Užívatelia"
 
-#: templates/whisper/room_detail.html:15
+#: templates/whisper/panel.html:12
+msgid "Rooms"
+msgstr "Miestnosti"
+
+#: templates/whisper/panel.html:74
+msgid "Detail"
+msgstr "Detail"
+
+#: templates/whisper/panel.html:77
+msgid "Update"
+msgstr "Zmeniť"
+
+#: templates/whisper/panel.html:80
+msgid "People"
+msgstr "Ľudia"
+
+#: templates/whisper/panel.html:83
+msgid "Leave"
+msgstr "Odísť"
+
+#: templates/whisper/panel.html:98 templates/whisper/room_detail.html:26
 msgid "Message"
 msgstr "Správa"
 
-#: templates/whisper/room_form.html:8
-msgid "Save"
-msgstr "Uložiť"
+#: templates/whisper/panel.html:106
+msgid "Room options"
+msgstr "Možnosti miestnosti"
+
+#: templates/whisper/panel.html:119
+msgid "Add users"
+msgstr "Všetci užívatelia"
+
+#: templates/whisper/room_detail.html:3 templates/whisper/room_form.html:3
+msgid "Chat room"
+msgstr "Chatovacia miestnosť"
+
+#: templates/whisper/room_list.html:3
+msgid "Chat rooms"
+msgstr "Chatovacie miestnosti"
+
+#: templates/whisper/room_list.html:23
+msgid "No data found"
+msgstr "Nenašli sa žiadne údaje"
 
 #: urls.py:9
 msgctxt "url"
@@ -130,3 +182,8 @@ msgstr "miestnost/<slug>/pridat-clena/"
 msgctxt "url"
 msgid "room/<slug>/"
 msgstr "miestnost/<slug>/"
+
+#: urls.py:13
+msgctxt "url"
+msgid "room/"
+msgstr "miestnost/"
