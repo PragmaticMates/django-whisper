@@ -108,10 +108,10 @@ class RoomQuerySet(QuerySet):
         )
 
     def empty(self):
-        return self.annotate(num_messages=Count('message__pk')).filter(num_messages=0)
+        return self.model.objects.filter(message__isnull=True)
 
     def not_empty(self):
-        return self.annotate(num_messages=Count('message__pk')).filter(num_messages__gt=0)
+        return self.model.objects.exclude(message__isnull=True)
 
     def with_unread_messages(self, user):
         if not user.is_authenticated:
