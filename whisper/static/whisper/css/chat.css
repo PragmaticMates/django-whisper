@@ -62,11 +62,14 @@
     .whisper #page-chat .chat-item .user-info {
       padding: 0 2.692rem; }
   .whisper #page-chat .chat-room, .whisper #page-chat .chat-channels, .whisper #page-chat .chat-room-members {
-    transition: all 0s ease;
     display: block;
     height: 100%;
     flex-basis: 100%;
     min-width: 100%;
+    transition: all 0s ease;
+    -webkit-transition: all 0s ease;
+    -moz-transition: all 0s ease;
+    -o-transition: all 0s ease;
     width: 100%; }
   .whisper #page-chat .chat-channels {
     margin-left: -24.62rem; }

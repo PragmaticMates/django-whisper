@@ -114,13 +114,15 @@ $chat-warning: #ffc107 !default;
         }
 
         .chat-room, .chat-channels, .chat-room-members {
-            transition: $chat-transition;
             display: block;
             height: 100%;
             flex-basis: 100%;
             min-width: 100%;
+            transition: $chat-transition;
+            -webkit-transition: $chat-transition;
+            -moz-transition: $chat-transition;
+            -o-transition: $chat-transition;
             width: 100%;
-
         }
 
         .chat-channels {

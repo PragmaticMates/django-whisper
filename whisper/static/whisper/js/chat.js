@@ -254,9 +254,18 @@ function initChat() {
         var room_slug = $(this).data('room-slug');
 
         if (room_slug) {
+            if (chat_socket) {
+                chat_socket.close();
+            }
+
             chat_socket = initSocket(room_slug, null);
         }
 
+        event.preventDefault();
+    });
+
+    $('#chat-room-hide').click(function (event) {
+        hideChatRoom(chat_socket);
         event.preventDefault();
     });
 
@@ -277,11 +286,7 @@ function initChat() {
         event.preventDefault();
     });
 
-
-    $('#chat-room-hide').click(function (event) {
-        hideChatRoom(chat_socket);
-        event.preventDefault();
-    });
+    initHideOnEsc()
 }
 
 function initUnreadChatMessagesSocket() {
@@ -362,4 +367,24 @@ function hideChatRoom(socket) {
 function hideRoomMembers() {
     $('.chat-room-members').removeClass("show");
     $('.chat-room').removeClass("hide-left");
+}
+
+function initHideOnEsc() {
+    if ($('#page-chat').length) {
+        $('body').on('keyup', function (e) {
+            if (e.keyCode === 27) {  // esc
+                hideOnEsc();
+            }
+        });
+    }
+}
+
+function hideOnEsc() {
+    if ($('.chat-room-members.show').length) {
+        hideRoomMembers();
+    } else if ($('.chat-room.show').length) {
+        hideChatRoom(chat_socket);
+    } else if ($('#page-chat.show').length) {
+        $('#page-chat').removeClass('show');
+    }
 }
