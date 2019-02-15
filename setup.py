@@ -15,7 +15,8 @@ setup(
     url='https://github.com/PragmaticMates/django-whisper',
     packages=[
         'whisper',
-        'whisper.migrations'
+        'whisper.migrations',
+        'whisper.templatetags'
     ],
     include_package_data=True,
     install_requires=('django', 'channels'),
