@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include AUTHORS
+recursive-include whisper/locale *
+recursive-include whisper/templates *
+recursive-include whisper/static *
