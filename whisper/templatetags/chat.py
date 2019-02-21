@@ -9,6 +9,9 @@ def room_slug(context, subject):
     request = context['request']
 
     if isinstance(subject, get_user_model()):
+        if not request.user.is_authenticated:
+            return None
+
         users_pks = [subject.pk, request.user.pk]
         users_pks = sorted(users_pks)
         users_pks = list(map(str, users_pks))
