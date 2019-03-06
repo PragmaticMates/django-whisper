@@ -246,6 +246,7 @@ $chat-warning: #ffc107 !default;
                     padding: .5rem 1rem;
                     position: relative;
                     white-space: pre-wrap;
+                    word-break: break-word;
 
                     &:after {
                         border: .6rem solid;

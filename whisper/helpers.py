@@ -1,9 +1,8 @@
-import json
-from json import JSONDecodeError
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from django.template.defaultfilters import date
 from django.templatetags.tz import localtime
+
 from whisper import settings
 from whisper.models import Message
 
