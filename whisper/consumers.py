@@ -10,6 +10,7 @@ from django.template.defaultfilters import date
 from django.templatetags.tz import localtime
 from django.utils.timezone import now
 
+from pragmatic.templatetags.pragmatic_tags import url_anchor
 from whisper import settings
 from whisper.helpers import ChatMessageHelper
 from whisper.models import Room, Message, RoomUser
@@ -50,7 +51,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         for message in await self.get_room_messages():
             await self.send_json(content={
                 'type': type,
-                'message': str(message),
+                'message': url_anchor(str(message)),
                 'timestamp': date(localtime(message.created), settings.DATETIME_FORMAT),
                 'username': str(message.user) if message.user is not None else None,
             })
@@ -187,7 +188,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     await self.channel_layer.group_send(
                         group_name, {
                             'type': 'chat_message',
-                            'message': text,
+                            'message': url_anchor(text),
                             'username': str(self.user),
                             'timestamp': date(localtime(message.created), settings.DATETIME_FORMAT)
                         }

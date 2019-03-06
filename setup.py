@@ -19,7 +19,7 @@ setup(
         'whisper.templatetags'
     ],
     include_package_data=True,
-    install_requires=('django', 'channels'),
+    install_requires=('django', 'channels', 'django-pragmatic>=2.13.0'),
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
