@@ -286,7 +286,7 @@ function initChat() {
         event.preventDefault();
     });
 
-    initHideOnEsc()
+    initHideOnEsc();
 }
 
 function initUnreadChatMessagesSocket() {
