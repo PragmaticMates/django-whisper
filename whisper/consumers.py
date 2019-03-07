@@ -28,12 +28,27 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         self.groups.append(self.room.group_name)
         type = message['type']
 
-        # update last read flag of current room user
-        if await self.get_room_user() is None:
-            await ChatMessageHelper.send_message(self.room, json.dumps({'USER_JOINED': {'username': str(self.user)}}))
-
-        await self.update_room_user(self.room, self.user)
         await super().websocket_connect(message)
+
+        if await self.get_room_user() is None:
+            # create new room if user is added to user_to_user room
+            if self.room.is_user_to_user_room:
+                new_room = await self.get_or_create_group_room([self.user.id])
+
+                for group_name in self.groups:
+                    await self.channel_layer.group_send(
+                        group_name, {
+                            'type': 'new_room',
+                            'slug': new_room.slug,
+                        }
+                    )
+
+                return
+            else:
+                await ChatMessageHelper.send_message(self.room, json.dumps({'USER_JOINED': {'username': str(self.user)}}))
+
+        # update last read flag of current room user
+        await self.update_room_user(self.room, self.user)
 
         # send room properties
         self.user_count = await ChatMessageHelper.get_user_count(self.room)
