@@ -1,0 +1,45 @@
+{% load i18n %}
+<div class="chat-room">
+    <header class="bg-white">
+        <div>
+            <h3 class="m-0"></h3>
+            <a class="chat-room-members-show" href="#">
+                <small class="user-count"></small>
+            </a>
+        </div>
+        <div class="d-flex flex-nowrap">
+            <div class="btn-group" role="group">
+                <a href="#" class="ml-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fal fa-lg fa-fw fa-ellipsis-v"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a id="show-room-detail" href="#" class="dropdown-item room-action" data-url="{% url 'chat:room_detail' '-slug-placeholder-' %}">
+                        <i class="fal fa-fw fa-comments"></i> {% trans 'Detail' %}
+                    </a>
+                    <a id="update-room" href="#" class="dropdown-item room-action" data-url="{% url 'chat:room_update' '-slug-placeholder-' %}">
+                        <i class="fa fa-fw fa-pencil"></i> {% trans 'Update' %}
+                    </a>
+                    <a href="#" class="dropdown-item chat-room-members-show">
+                        <i class="fal fa-fw fa-user-plus"></i> {% trans 'People' %}
+                    </a>
+                    <a id="leave-room" href="#" class="dropdown-item">
+                        <i class="far fa-fw fa-sign-out"></i> {% trans 'Leave' %}
+                    </a>
+                </div>
+            </div>
+            <a id="chat-room-hide" class="ml-2" href="#"><i class="fas fa-times"></i></a>
+        </div>
+    </header>
+
+    <div class="message-list-wrapper">
+        <div class="message-list" data-current-username="{{ request.user }}"></div>
+        <small id="user-typing"></small>
+    </div>
+
+    <footer class="bg-white">
+        <div class="message-input-wrapper">
+            <textarea class="form-control message-input autoExpand w-100" rows="1" data-min-rows="1" data-max-rows="7" placeholder="{% trans 'Message' %}"></textarea>
+            <a href="#" class="send-message"><i class="fas fa-lg fa-arrow-circle-up"></i></a>
+        </div>
+    </footer>
+</div>

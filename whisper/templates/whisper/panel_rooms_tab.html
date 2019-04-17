@@ -1,0 +1,24 @@
+<div class="tab-pane fade" id="pills-rooms" role="tabpanel" aria-labelledby="pills-rooms-tab">
+    {% for room in recent_rooms %}
+        <div class="chat-item position-relative {% if room.unread_messages > 0 %}has-unread-messages{% endif %}" rel="room-{{ room.id }}">
+            <div>
+                <div>
+                    <span>{{ room.name }}</span>
+                    <small class="d-block">{{ room.modified }}</small>
+                </div>
+                <span class="badge badge-primary rounded-circle ml-1">{{ room.unread_messages }}</span>
+            </div>
+            <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="{{ room.slug }}"></a>
+        </div>
+    {% endfor %}
+    <div class="chat-item position-relative chat-item-template" rel="room-id-placeholder">
+        <div>
+            <div>
+                <span>room-name-placeholder</span>
+                <small class="d-block">room-modified-placeholder</small>
+            </div>
+            <span class="badge badge-primary rounded-circle ml-1"></span>
+        </div>
+        <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="room-slug-placeholder"></a>
+    </div>
+</div>

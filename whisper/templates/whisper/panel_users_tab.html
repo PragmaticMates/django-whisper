@@ -1,0 +1,13 @@
+{% load cache chat %}
+<div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
+    {% cache 3600 chat_users request.user.pk %}
+        {% for user in chat_users %}
+            {% if user != request.user %}
+                <div class="chat-item position-relative">
+                    {% include 'whisper/user.html' with user=user %}
+                    <a class="chat-room-show position-absolute d-block h-100 w-100" href="#" data-room-slug="{% room_slug user %}"></a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endcache %}
+</div>
