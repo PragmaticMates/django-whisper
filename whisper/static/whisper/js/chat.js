@@ -233,20 +233,21 @@ function initSocket(room_slug, scrollItem) {
 
 function initChat() {
     chat_socket = null;
+    var $body = $('body');
 
-    $('#chat-channels-show').click(function (event) {
+    $body.on('click', '#chat-channels-show', function (event) {
         $('#page-chat').addClass("show");
         $('.chat-channels').addClass("show");
         event.preventDefault();
     });
 
-    $('#chat-channels-hide').click(function (event) {
+    $body.on('click', '#chat-channels-hide', function (event) {
         $('#page-chat').removeClass("show");
         $('.chat-channels').removeClass("show");
         event.preventDefault();
     });
 
-    $('body').on('click', '.chat-room-show', function (event) {
+    $body.on('click', '.chat-room-show', function (event) {
         $('#page-chat').addClass("show");
         $('.chat-room').addClass("show");
         $('.chat-channels').removeClass("show");
@@ -264,12 +265,12 @@ function initChat() {
         event.preventDefault();
     });
 
-    $('#chat-room-hide').click(function (event) {
+    $body.on('click', '#chat-room-hide', function (event) {
         hideChatRoom(chat_socket);
         event.preventDefault();
     });
 
-    $('.chat-room-members-show').click(function (event) {
+    $body.on('click', '.chat-room-members-show', function (event) {
         $('.chat-room-members').addClass("show");
         $('.chat-room').addClass("hide-left");
 
@@ -281,7 +282,7 @@ function initChat() {
         event.preventDefault();
     });
 
-    $('#chat-room-members-hide').click(function (event) {
+    $body.on('click', '#chat-room-members-hide', function (event) {
         hideRoomMembers();
         event.preventDefault();
     });
@@ -370,13 +371,11 @@ function hideRoomMembers() {
 }
 
 function initHideOnEsc() {
-    if ($('#page-chat').length) {
-        $('body').on('keyup', function (e) {
-            if (e.keyCode === 27) {  // esc
-                hideOnEsc();
-            }
-        });
-    }
+    $('body').on('keyup', function (e) {
+        if (e.keyCode === 27) {  // esc
+            hideOnEsc();
+        }
+    });
 }
 
 function hideOnEsc() {
