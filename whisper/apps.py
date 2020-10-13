@@ -10,12 +10,7 @@ class ChatConfig(AppConfig):
     name = 'whisper'
     verbose_name = _('Chat')
 
-    def ready(self):
-        self.schedule_jobs()
-
     def schedule_jobs(self):
-        print('Scheduling chat jobs...')
-
         try:
             import django_rq
             scheduler = django_rq.get_scheduler('cron')
