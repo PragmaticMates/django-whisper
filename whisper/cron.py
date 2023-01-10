@@ -7,7 +7,12 @@ from django.core.mail import send_mail
 from django.template import loader, TemplateDoesNotExist
 from django.utils import translation
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+try:
+    # older Django
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    # Django >= 3
+    from django.utils.translation import gettext_lazy as _
 
 
 def notify_about_unread_messages():

@@ -2,7 +2,12 @@ from django.contrib import admin
 from django.db import models
 from django.db.models import Count, Value
 from django.db.models.functions import Substr, StrIndex
-from django.utils.translation import ugettext_lazy as _
+try:
+    # older Django
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    # Django >= 3
+    from django.utils.translation import gettext_lazy as _
 from whisper.models import Room, Message
 
 
