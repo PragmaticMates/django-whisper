@@ -1,7 +1,19 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from django.utils.translation import ugettext_lazy, ugettext
+try:
+    # older Django
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    # Django >= 3
+    from django.utils.translation import gettext_lazy as _
+
+try:
+    # older Django
+    from django.utils.translation import ugettext
+except ImportError:
+    # Django >= 3
+    from django.utils.translation import gettext as ugettext
 
 ROOM_FORM_CLASS = getattr(
     settings, 'WHISPER_ROOM_FORM_CLASS', None
@@ -38,8 +50,8 @@ DATETIME_FORMAT = getattr(
 MESSAGE_TYPES = getattr(
     settings, 'WHISPER_MESSAGE_TYPES',
     {
-        'USER_LEFT': ugettext_lazy('{username} left room'),
-        'USER_JOINED': ugettext_lazy('{username} joined room'),
+        'USER_LEFT': _('{username} left room'),
+        'USER_JOINED': _('{username} joined room'),
         'USER_TYPING': ugettext('{username} is typing ...'),
     }
 )
